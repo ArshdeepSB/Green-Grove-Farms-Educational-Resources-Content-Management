@@ -1,6 +1,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
-import ResourceLibrary from './components/ResourcePage';
+import ResourcesLibrary from './components/ResourcePage';
+import AdminRes from './pages/AdminResources';
 
 function App() {
   return (
@@ -8,12 +9,16 @@ function App() {
       <div>
         {/* Navigation */}
         <nav>
-          <Link to="/resources">Resource Library</Link>
+          <Link to="/ResourcesLibrary">Resource Library</Link>
+          <Link to="/">Register For Events</Link>
+          <Link to="/AdminRes">AdminRes</Link>
+
         </nav>
 
         {/* Routes */}
         <Routes>
-          <Route path="/resources" element={<ResourceLibrary />} />
+          <Route path="/ResourcesLibrary" element={<ResourcesLibrary />} />
+          <Route path="/AdminRes" element={<AdminRes />} />
         </Routes>
       </div>
     </Router>

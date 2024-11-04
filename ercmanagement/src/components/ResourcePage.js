@@ -1,80 +1,80 @@
-import React from 'react';
-import './resourcepage.css'; // Optional: Add CSS styling
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import './resourcepage.css'; // Import the CSS file
 
-// Sample data for resources
-const resources = [
-  {
-    category: 'Articles',
-    items: [
-      {
-        title: 'Sustainable Farming 101',
-        description: 'An introductory guide to sustainable farming practices.',
-        link: 'https://example.com/sustainable-farming-101'
-      },
-      {
-        title: 'Organic Certification Process',
-        description: 'Step-by-step guide to get certified for organic farming.',
-        link: 'https://example.com/organic-certification'
-      }
-    ]
-  },
-  {
-    category: 'Tutorials',
-    items: [
-      {
-        title: 'Composting for Beginners',
-        description: 'A video tutorial on how to start composting at home.',
-        link: 'https://example.com/composting-tutorial'
-      },
-      {
-        title: 'Soil Health Improvement',
-        description: 'Learn how to improve soil health naturally.',
-        link: 'https://example.com/soil-health'
-      }
-    ]
-  },
-  {
-    category: 'Videos',
-    items: [
-      {
-        title: 'Sustainable Water Usage in Farming',
-        description: 'A documentary on water conservation techniques in farming.',
-        link: 'https://example.com/water-usage-video'
-      },
-      {
-        title: 'The Future of Organic Farming',
-        description: 'An insightful video on the future trends in organic farming.',
-        link: 'https://example.com/future-organic-farming'
-      }
-    ]
-  }
-];
+const ResourcesLibrary = () => {
+    const [resources, setResources] = useState([]);
+    const [error, setError] = useState('');
 
-const ResourceLibrary = () => {
-  return (
-    <div className="resource-library">
-      <h1>Resource Library</h1>
-      <p>Explore articles, tutorials, and videos on sustainable farming practices, organic certification, and product usage.</p>
+    // Fetch all resources on component mount
+    useEffect(() => {
+        const fetchResources = async () => {
+            try {
+                const response = await axios.get('http://localhost:5002/api/resourceInfo');
+                setResources(response.data);
+            } catch (err) {
+                console.error('Error fetching resources:', err);
+                setError('Error fetching resources. Please try again later.');
+            }
+        };
 
-      {/* Render each resource category */}
-      {resources.map((resourceCategory) => (
-        <div key={resourceCategory.category} className="resource-category">
-          <h2>{resourceCategory.category}</h2>
-          <ul>
-            {resourceCategory.items.map((resource, index) => (
-              <li key={index} className="resource-item">
-                <h3>{resource.title}</h3>
-                <p>{resource.description}</p>
-                <a href={resource.link} target="_blank" rel="noopener noreferrer">
-                  Read More
-                </a>
-              </li>
-            ))}
-          </ul>
+        fetchResources();
+    }, []);
+
+    // Filter resources into articles and videos
+    const articles = resources.filter(resource => resource.youtubeId === ''); // Articles when youtubeId is '0'
+    const videos = resources.filter(resource => resource.youtubeId !== '0' && resource.youtubeId); // Videos when youtubeId is not '0'
+
+    return (
+        <div className="container">
+            <h1>Resources Library</h1>
+            {error && <p className="error-message">{error}</p>}
+
+            <h2 className="section-title">Videos</h2>
+            {videos.length === 0 ? (
+                <p>No videos available at this time.</p>
+            ) : (
+                <div className="video-container">
+                    {videos.map((resource) => (
+                        <div key={resource._id} className="video-item">
+                            <h3 style={{ margin: '0' }}>{resource.title}</h3>
+                            <p>{resource.description}</p>
+                            <a href={resource.link} target="_blank" rel="noopener noreferrer" className="resource-link">
+                                Visit Resource
+                            </a>
+                            <div className="video-frame">
+                                <h4 style={{ margin: '10px 0 5px 0' }}>Video:</h4>
+                                <iframe
+                                    src={`https://www.youtube.com/embed/${resource.youtubeId}`}
+                                    title={resource.title}
+                                    frameBorder="0"
+                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                    allowFullScreen
+                                ></iframe>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            )}
+
+            <h2 className="article-title">Articles & Tutorials</h2>
+            {articles.length === 0 ? (
+                <p>No articles or tutorials available at this time.</p>
+            ) : (
+                <div className="article-container">
+                    {articles.map((resource) => (
+                        <div key={resource._id} className="article-item">
+                            <h3 style={{ margin: '0' }}>{resource.title}</h3>
+                            <p>{resource.description}</p>
+                            <a href={resource.link} target="_blank" rel="noopener noreferrer" className="resource-link">
+                                Visit Resource
+                            </a>
+                        </div>
+                    ))}
+                </div>
+            )}
         </div>
-      ))}
-    </div>
-  );
+    );
 };
 
-export default ResourceLibrary;
+export default ResourcesLibrary;

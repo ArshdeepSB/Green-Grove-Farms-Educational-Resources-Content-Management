@@ -1,0 +1,5 @@
+ResourceArticles(ArticleID,Title,Description,Link)
+ResourcesTutorials(TutorialID, Title, Description, Link)
+ResourcesVideos(VideoID, Title, Description, YoutubeID)
+
+

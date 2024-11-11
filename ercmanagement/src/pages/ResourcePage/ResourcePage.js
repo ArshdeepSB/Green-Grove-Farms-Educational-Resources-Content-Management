@@ -61,7 +61,7 @@ const ResourcesLibrary = () => {
             {articles.length === 0 ? (
                 <p>No articles or tutorials available at this time.</p>
             ) : (
-                <div className="article-container">
+                <div className="article-container section">
                     {articles.map((resource) => (
                         <div key={resource._id} className="article-item">
                             <h3 style={{ margin: '0' }}>{resource.title}</h3>
@@ -72,6 +72,9 @@ const ResourcesLibrary = () => {
                         </div>
                     ))}
                 </div>
+               
+                
+                
             )}
         </div>
     );

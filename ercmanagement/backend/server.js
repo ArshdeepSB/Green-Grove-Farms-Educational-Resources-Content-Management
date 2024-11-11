@@ -26,6 +26,115 @@ const resourceSchema = new mongoose.Schema({
 // Create a model for resources
 const Resource = mongoose.model('resourceInfo', resourceSchema);
 
+const userSchema = new mongoose.Schema({
+    email: { type: String, unique: true, required: true },
+    password: { type: String, required: true }
+});
+
+const User = mongoose.model('User', userSchema);
+
+// Signup route
+app.post('/api/signup', async (req, res) => {
+    const { email, password } = req.body;
+
+    try {
+        // Check if the user already exists
+        const existingUser = await User.findOne({ email });
+        if (existingUser) return res.status(400).json({ message: 'Email already registered' });
+
+        // Hash password before saving
+        const hashedPassword = await bcrypt.hash(password, 10);
+        const user = new User({ email, password: hashedPassword });
+        await user.save();
+        res.json({ message: 'Signup successful' });
+    } catch (err) {
+        res.status(500).json({ message: 'Error signing up' });
+    }
+});
+
+// Login route
+app.post('/api/login', async (req, res) => {
+    const { email, password } = req.body;
+
+    try {
+        const user = await User.findOne({ email });
+        if (!user) return res.status(400).json({ message: 'User not found' });
+
+        // Check if password is correct
+        const isMatch = await bcrypt.compare(password, user.password);
+        if (!isMatch) return res.status(400).json({ message: 'Invalid credentials' });
+
+        // Generate JWT token
+        const token = jwt.sign({ id: user._id }, 'your_jwt_secret', { expiresIn: '1h' });
+        res.json({ token });
+    } catch (err) {
+        res.status(500).json({ message: 'Error logging in' });
+    }
+});
+
+
+const jwt = require('jsonwebtoken');
+
+app.post('/api/registerUser', async (req, res) => {
+    const { fullname, dob, email, password, accountNumber } = req.body;
+    const newUser = new User({ fullname, dob, email, password, accountNumber, isAdmin: false });
+    
+    try {
+        await newUser.save();
+        res.status(201).send('User account created successfully');
+    } catch (error) {
+        res.status(500).send('Error creating user account');
+    }
+});
+// Route to handle admin registration (this should be secured)
+// Route to handle admin registration (this should be secured)
+app.post('/api/registerAdmin', async (req, res) => {
+    const { fullname, dob, email, password, accountNumber } = req.body;
+    const newAdmin = new User({ fullname, dob, email, password, accountNumber, isAdmin: true });
+
+    try {
+        await newAdmin.save();
+        res.status(201).send('Admin account created successfully');
+    } catch (error) {
+        res.status(500).send('Error creating admin account');
+    }
+});
+
+// Route for user login
+app.post('/api/login', async (req, res) => {
+    const { email, password } = req.body;
+    try {
+        const user = await User.findOne({ email });
+        if (!user || user.password !== password) {
+            return res.status(401).send('Invalid credentials');
+        }
+
+        const token = jwt.sign({ id: user._id, isAdmin: user.isAdmin }, 'your_jwt_secret', { expiresIn: '1h' });
+        res.json({ token });
+    } catch (error) {
+        res.status(500).send('Error logging in');
+    }
+});
+const verifyToken = (req, res, next) => {
+    const token = req.headers['authorization'];
+    if (!token) return res.sendStatus(403);
+
+    jwt.verify(token, 'your_jwt_secret', (err, decoded) => {
+        if (err) return res.sendStatus(403);
+        req.userId = decoded.id;
+        req.isAdmin = decoded.isAdmin;
+        next();
+    });
+};
+
+const isAdmin = (req, res, next) => {
+    if (!req.isAdmin) {
+        return res.status(403).send('Access denied. Admins only.');
+    }
+    next();
+};
+
+
 // Define a route to handle resource creation
 app.post('/api/createResource', async (req, res) => {
     const { title, link, description, youtubeId } = req.body;

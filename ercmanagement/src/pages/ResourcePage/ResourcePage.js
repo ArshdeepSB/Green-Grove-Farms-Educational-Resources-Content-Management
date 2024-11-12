@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import './resourcepage.css'; // Import the CSS file
 
-const ResourcesLibrary = () => {
+const ResourcesLibrary = ({searchTerm}) => {
     const [resources, setResources] = useState([]);
     const [error, setError] = useState('');
 
@@ -21,9 +21,14 @@ const ResourcesLibrary = () => {
         fetchResources();
     }, []);
 
+    const filteredResources = resources.filter(resource =>
+        resource.title.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+    
+
     // Filter resources into articles and videos
-    const articles = resources.filter(resource => resource.youtubeId === ''); // Articles when youtubeId is '0'
-    const videos = resources.filter(resource => resource.youtubeId !== '0' && resource.youtubeId); // Videos when youtubeId is not '0'
+    const articles = filteredResources.filter(resource => resource.youtubeId === ''); // Articles when youtubeId is '0'
+    const videos = filteredResources.filter(resource => resource.youtubeId !== '0' && resource.youtubeId); // Videos when youtubeId is not '0'
 
     return (
         <div className="container">

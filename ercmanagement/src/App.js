@@ -7,6 +7,7 @@ import UserLogin from './pages/UserPage/index';
 import AdminResi from './pages/AdminResources/index2';
 import Login from './pages/Signin';
 import Signup from './pages/Signup';
+import "./App.css"
 
 function App() {
   return (

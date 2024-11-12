@@ -20,6 +20,29 @@ const SearchBar = ({ searchTerm, onSearchChange }) => {
 };
 
 const styles = {
-  };
+  searchContainer: {
+    display: 'flex',
+    alignItems: 'center',
+    borderRadius: '8px',
+    overflow: 'hidden',
+    backgroundColor: '#eaf3f9',
+    padding: '5px',
+  },
+  searchInput: {
+    border: 'none',
+    outline: 'none',
+    padding: '8px',
+    width: '250px',
+    fontSize: '16px',
+    backgroundColor: 'transparent',
+  },
+  iconButton: {
+    border: 'none',
+    background: 'none',
+    cursor: 'pointer',
+    fontSize: '18px',
+    padding: '5px',
+  },
+};
 
 export default SearchBar;

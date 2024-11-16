@@ -8,6 +8,7 @@ import AdminResi from './pages/AdminResources/index2';
 import Login from './pages/Signin';
 import Signup from './pages/Signup';
 import SearchBar from './components/searchBar';
+import "./App.css"
 
 function App() {
   const [searchTerm, setSearchTerm] = useState(''); // State to manage search term

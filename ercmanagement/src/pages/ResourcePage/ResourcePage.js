@@ -2,9 +2,11 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import './resourcepage.css'; // Import the CSS file
 
-const ResourcesLibrary = ({searchTerm}) => {
+const ResourcesLibrary = ({ searchTerm }) => {
     const [resources, setResources] = useState([]);
     const [error, setError] = useState('');
+    const [sortVideosByNewest, setSortVideosByNewest] = useState(false);
+    const [sortArticlesByNewest, setSortArticlesByNewest] = useState(false);
 
     // Fetch all resources on component mount
     useEffect(() => {
@@ -24,11 +26,22 @@ const ResourcesLibrary = ({searchTerm}) => {
     const filteredResources = resources.filter(resource =>
         resource.title.toLowerCase().includes(searchTerm.toLowerCase())
     );
-    
 
     // Filter resources into articles and videos
     const articles = filteredResources.filter(resource => resource.youtubeId === ''); // Articles when youtubeId is '0'
     const videos = filteredResources.filter(resource => resource.youtubeId !== '0' && resource.youtubeId); // Videos when youtubeId is not '0'
+
+    const sortedVideos = videos.sort((a, b) => {
+        const dateA = new Date(a.createDate);
+        const dateB = new Date(b.createDate);
+        return sortVideosByNewest ? dateB - dateA : dateA - dateB;
+    });
+
+    const sortedArticles = articles.sort((a, b) => {
+        const dateA = new Date(a.createDate);
+        const dateB = new Date(b.createDate);
+        return sortArticlesByNewest ? dateB - dateA : dateA - dateB;
+    });
 
     return (
         <div className="container">
@@ -36,11 +49,19 @@ const ResourcesLibrary = ({searchTerm}) => {
             {error && <p className="error-message">{error}</p>}
 
             <h2 className="section-title">Videos</h2>
+            <div className="sort-button-container">
+                <button
+                    className={`sort-button ${sortVideosByNewest ? 'active' : ''}`}
+                    onClick={() => setSortVideosByNewest(!sortVideosByNewest)}
+                >
+                    {sortVideosByNewest ? 'Newest to Oldest' : 'Oldest to Newest'}
+                </button>
+            </div>
             {videos.length === 0 ? (
-                <p>No videos available at this time.</p>
+                <p>No videos that match your search</p>
             ) : (
                 <div className="video-container">
-                    {videos.map((resource) => (
+                    {sortedVideos.map((resource) => (
                         <div key={resource._id} className="video-item">
                             <h3 style={{ margin: '0' }}>{resource.title}</h3>
                             <p>{resource.description}</p>
@@ -63,11 +84,19 @@ const ResourcesLibrary = ({searchTerm}) => {
             )}
 
             <h2 className="article-title">Articles & Tutorials</h2>
-            {articles.length === 0 ? (
-                <p>No articles or tutorials available at this time.</p>
+            <div className="sort-button-container">
+                <button
+                    className={`sort-button ${sortArticlesByNewest ? 'active' : ''}`}
+                    onClick={() => setSortArticlesByNewest(!sortArticlesByNewest)}
+                >
+                    {sortArticlesByNewest ? 'Newest to Oldest' : 'Oldest to Newest'}
+                </button>
+            </div>
+            {sortedArticles.length === 0 ? (
+                <p>No articles or tutorials that match your search</p>
             ) : (
                 <div className="article-container section">
-                    {articles.map((resource) => (
+                    {sortedArticles.map((resource) => (
                         <div key={resource._id} className="article-item">
                             <h3 style={{ margin: '0' }}>{resource.title}</h3>
                             <p>{resource.description}</p>
@@ -77,9 +106,6 @@ const ResourcesLibrary = ({searchTerm}) => {
                         </div>
                     ))}
                 </div>
-               
-                
-                
             )}
         </div>
     );

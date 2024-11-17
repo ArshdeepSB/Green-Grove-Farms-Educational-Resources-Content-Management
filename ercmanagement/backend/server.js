@@ -21,6 +21,7 @@ const resourceSchema = new mongoose.Schema({
     link: { type: String, required: true },
     description: { type: String, required: true },
     youtubeId: { type: String, required: false },
+    createDate: { type: Date, default: Date.now } 
 });
 
 // Create a model for resources
@@ -41,7 +42,6 @@ const eventSchema = new mongoose.Schema({
   location: { type: String, required: true },
 });
 const Event = mongoose.model('Event', eventSchema);
-module.exports = Event;
 
 // Define a Schema for event registration
 const eventRegistrationSchema = new mongoose.Schema({
@@ -67,7 +67,6 @@ const eventRegistrationSchema = new mongoose.Schema({
 });
 
 const EventRegistration = mongoose.model('EventRegistration', eventRegistrationSchema);
-module.exports = EventRegistration;
 
 // Signup route
 app.post('/api/signup', async (req, res) => {
@@ -123,7 +122,6 @@ app.post('/api/registerUser', async (req, res) => {
         res.status(500).send('Error creating user account');
     }
 });
-// Route to handle admin registration (this should be secured)
 // Route to handle admin registration (this should be secured)
 app.post('/api/registerAdmin', async (req, res) => {
     const { fullname, dob, email, password, accountNumber } = req.body;
@@ -295,7 +293,13 @@ app.delete('api/events/:id', async (req, res) => {
   }
 });
 
-module.exports = app;
+module.exports = {
+    Resource,
+    User,
+    Event,
+    EventRegistration,
+    app
+};
 
 
 // Route for retrieving all event registrations

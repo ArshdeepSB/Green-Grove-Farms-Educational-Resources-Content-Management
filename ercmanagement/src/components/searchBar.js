@@ -10,11 +10,6 @@ const SearchBar = ({ searchTerm, onSearchChange }) => {
         onChange={(e) => onSearchChange(e.target.value)}
         style={styles.searchInput}
       />
-      <button style={styles.iconButton}>
-        <span role="img" aria-label="search">
-          🔍
-        </span>
-      </button>
     </div>
   );
 };
@@ -35,13 +30,6 @@ const styles = {
     width: '250px',
     fontSize: '16px',
     backgroundColor: 'transparent',
-  },
-  iconButton: {
-    border: 'none',
-    background: 'none',
-    cursor: 'pointer',
-    fontSize: '18px',
-    padding: '5px',
   },
 };
 

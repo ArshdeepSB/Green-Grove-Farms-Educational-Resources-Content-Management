@@ -8,9 +8,9 @@ import AdminResi from './pages/AdminResources/index2';
 import Login from './pages/Signin';
 import Signup from './pages/Signup';
 import EventsList from './pages/EventRegistration/Events'; // Import the EventsList component
-import EventRegistrationPage from './pages/EventRegistration/EventRegistrationPage'; // Import the EventRegistrationPage component
 import SearchBar from './components/searchBar';
 import "./App.css"
+import UEventsList from './pages/userEvents';
 
 function App() {
   const [searchTerm, setSearchTerm] = useState(''); // State to manage search term
@@ -23,9 +23,10 @@ function App() {
           <Link to="/">Register For Events</Link>
           <Link to="/AdminRes">AdminRes</Link>
           <Link to="/admin-login">Admin User</Link>
-          <Link to="/events">Events</Link>
+          <Link to="/events">Admin Events</Link>
           <Link to="/event-registration">Register For Events</Link>
           <Link to="/user-login">User </Link>
+          <Link to="/user-events">Events</Link>
           <SearchBar searchTerm={searchTerm} onSearchChange={setSearchTerm} />
         </nav>
 
@@ -38,7 +39,7 @@ function App() {
           <Route path="/login" element={<Login />}/>
           <Route path="/signup" element={<Signup />}/>
           <Route path="/events" element={<EventsList />} />
-          <Route path="/event-registration" element={<EventRegistrationPage/>} />
+          <Route path="/user-events" element={< UEventsList/>} />
 
         </Routes>
       </div>

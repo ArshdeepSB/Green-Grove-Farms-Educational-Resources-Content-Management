@@ -45,10 +45,15 @@ module.exports = Event;
 
 // Define a Schema for event registration
 const eventRegistrationSchema = new mongoose.Schema({
+    
     email: {
         type: String,
         required: true,
         match: [/.+\@.+\..+/, 'Please fill a valid email address'] // Email validation
+    },
+    name: {
+        type:String,
+        required: true,
     },
     event_id: {
         type: mongoose.Schema.Types.ObjectId,
@@ -206,23 +211,20 @@ app.get('/api/resourceInfo/:id', async (req, res) => {
 
 //Route for creating a new event registration
 app.post('/api/registerEvent', async (req, res) => {
+    const {  name, email, eventId } = req.body;
+
+    if (!name  || !email || !eventId) {
+        return res.status(400).json({ message: 'All fields are required' });
+    }
+
+    const newRegistration = new EventRegistration({ email,name, event_id: eventId });
+
     try {
-        const { email, eventId } = req.body;
-
-
-        // Check if the registration exists in the db
-        const regExists = await EventRegistration.findOne({ email: email, event_id: eventId });
-        if (regExists) {
-            return res.status(400).json({ message: 'User already registered for this event' });
-        }
-
-        // Create new registration
-        const registration = new EventRegistration({ email: email, event_id: eventId });
-        await registration.save();
-
-        res.status(201).send('Registration successful');
-    } catch (error) {
-        res.status(500).send('Error registering for event: ' + error.message);
+        const savedRegistration = await newRegistration.save();
+        res.status(201).json(savedRegistration);
+    } catch (err) {
+        res.status(400).json({ message: 'Error registering for event', error: err });
+        console.error('Error registering for event:', err);
     }
 });
 

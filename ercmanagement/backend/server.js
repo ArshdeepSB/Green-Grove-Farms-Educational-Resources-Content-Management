@@ -33,6 +33,37 @@ const userSchema = new mongoose.Schema({
 
 const User = mongoose.model('User', userSchema);
 
+// Define a Schema for events
+const eventSchema = new mongoose.Schema({
+  name: { type: String, required: true },
+  description: { type: String, required: true },
+  date: { type: Date, required: true },
+  location: { type: String, required: true },
+});
+const Event = mongoose.model('Event', eventSchema);
+module.exports = Event;
+
+// Define a Schema for event registration
+const eventRegistrationSchema = new mongoose.Schema({
+    email: {
+        type: String,
+        required: true,
+        match: [/.+\@.+\..+/, 'Please fill a valid email address'] // Email validation
+    },
+    event_id: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Event',
+        required: true
+    },
+    registration_date: {
+        type: Date,
+        default: Date.now
+    }
+});
+
+const EventRegistration = mongoose.model('EventRegistration', eventRegistrationSchema);
+module.exports = EventRegistration;
+
 // Signup route
 app.post('/api/signup', async (req, res) => {
     const { email, password } = req.body;
@@ -74,6 +105,7 @@ app.post('/api/login', async (req, res) => {
 
 
 const jwt = require('jsonwebtoken');
+const e = require('express');
 
 app.post('/api/registerUser', async (req, res) => {
     const { fullname, dob, email, password, accountNumber } = req.body;
@@ -169,6 +201,126 @@ app.get('/api/resourceInfo/:id', async (req, res) => {
         res.status(200).json(resource); // Send the resource as a JSON response
     } catch (error) {
         res.status(500).send('Error retrieving resource: ' + error.message);
+    }
+});
+
+//Route for creating a new event registration
+app.post('/api/registerEvent', async (req, res) => {
+    try {
+        const { email, eventId } = req.body;
+
+
+        // Check if the registration exists in the db
+        const regExists = await EventRegistration.findOne({ email: email, event_id: eventId });
+        if (regExists) {
+            return res.status(400).json({ message: 'User already registered for this event' });
+        }
+
+        // Create new registration
+        const registration = new EventRegistration({ email: email, event_id: eventId });
+        await registration.save();
+
+        res.status(201).send('Registration successful');
+    } catch (error) {
+        res.status(500).send('Error registering for event: ' + error.message);
+    }
+});
+
+
+// Events
+
+// Get all events
+app.get('/api/events', async (req, res) => {
+  try {
+    const events = await Event.find();
+    res.json(events);
+  } catch (err) {
+    res.status(500).send('Error fetching events' + err.message);
+  }
+});
+
+// Get a specific event
+app.get('/api/events/:id', async (req, res) => {
+  try {
+    const event = await Event.findById(req.params.id);
+    if (!event) return res.status(404).json({ message: 'Event not found' });
+    res.json(event);
+  } catch (err) {
+    res.status(500).json({ message: 'Error fetching event' });
+  }
+});
+
+// Create an event
+app.post('/api/createEvent', async (req, res) => {
+  const { name, description, date, location } = req.body;
+  console.log('Received data:', req.body); // Log the received data
+
+  if (!name || !description || !date || !location) {
+    return res.status(400).json({ message: 'All fields are required' });
+  }
+
+  const newEvent = new Event({ name, description, date, location });
+  console.log('New event:', newEvent); // Log the new event object
+
+  try {
+    const savedEvent = await newEvent.save();
+    res.status(201).json(savedEvent);
+  } catch (err) {
+    res.status(400).json({ message: 'Error creating event', error: err });
+    console.error('Error creating event:', err);
+  }
+});
+
+// Update an event
+app.put('api/events/:id', async (req, res) => {
+  try {
+    const updatedEvent = await Event.findByIdAndUpdate(req.params.id, req.body, { new: true });
+    if (!updatedEvent) return res.status(404).json({ message: 'Event not found' });
+    res.json(updatedEvent);
+  } catch (err) {
+    res.status(400).json({ message: 'Error updating event' });
+  }
+});
+
+// Delete an event
+app.delete('api/events/:id', async (req, res) => {
+  try {
+    const deletedEvent = await Event.findByIdAndDelete(req.params.id);
+    if (!deletedEvent) return res.status(404).json({ message: 'Event not found' });
+    res.json({ message: 'Event deleted successfully' });
+  } catch (err) {
+    res.status(500).json({ message: 'Error deleting event' });
+  }
+});
+
+module.exports = app;
+
+
+// Route for retrieving all event registrations
+app.get('/api/regInfo', async (req, res) => {
+    try {
+        const registrations = await EventRegistration.find()
+            .populate('event_id', 'name date'); // Populate event information
+
+        res.status(200).json(registrations);
+    } catch (error) {
+        res.status(500).send('Error getting registrations: ' + error.message);
+    }
+});
+
+// Route to get a registration by ID
+app.get('/api/regInfo/:id', async (req, res) => {
+    try {
+        const registration = await EventRegistration.findById(req.params.id)
+            .populate('event_id', 'name date'); // Populate event information
+
+        if (!registration) {
+            return res.status(404).send('Registration not found');
+        }
+
+        res.status(200).json(registration);
+    } catch (error) {
+        res.status(500).send('Error getting registration: ' + error.message);
     }
 });
 

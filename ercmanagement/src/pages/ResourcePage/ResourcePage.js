@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import './resourcepage.css'; // Import the CSS file
 
-const ResourcesLibrary = ({searchTerm}) => {
+const ResourcesLibrary = ({ searchTerm }) => {
     const [resources, setResources] = useState([]);
     const [error, setError] = useState('');
     const [sortVideosByNewest, setSortVideosByNewest] = useState(false);
@@ -26,7 +26,6 @@ const ResourcesLibrary = ({searchTerm}) => {
     const filteredResources = resources.filter(resource =>
         resource.title.toLowerCase().includes(searchTerm.toLowerCase())
     );
-    
 
     // Filter resources into articles and videos
     const articles = filteredResources.filter(resource => resource.youtubeId === ''); // Articles when youtubeId is '0'
@@ -49,18 +48,17 @@ const ResourcesLibrary = ({searchTerm}) => {
             <h1>Resources Library</h1>
             {error && <p className="error-message">{error}</p>}
 
+            <h2 className="section-title">Videos</h2>
             <div className="sort-button-container">
                 <button
-                    className="sort-button"
+                    className={`sort-button ${sortVideosByNewest ? 'active' : ''}`}
                     onClick={() => setSortVideosByNewest(!sortVideosByNewest)}
                 >
-                    Sort by {sortVideosByNewest  ? 'Oldest' : 'Newest'}
+                    {sortVideosByNewest ? 'Newest to Oldest' : 'Oldest to Newest'}
                 </button>
             </div>
-
-            <h2 className="section-title">Videos</h2>
             {videos.length === 0 ? (
-                <p>No videos available at this time.</p>
+                <p>No videos that match your search</p>
             ) : (
                 <div className="video-container">
                     {sortedVideos.map((resource) => (
@@ -88,14 +86,14 @@ const ResourcesLibrary = ({searchTerm}) => {
             <h2 className="article-title">Articles & Tutorials</h2>
             <div className="sort-button-container">
                 <button
-                    className="sort-button"
+                    className={`sort-button ${sortArticlesByNewest ? 'active' : ''}`}
                     onClick={() => setSortArticlesByNewest(!sortArticlesByNewest)}
                 >
-                    Sort Articles by {sortArticlesByNewest ? 'Oldest' : 'Newest'}
+                    {sortArticlesByNewest ? 'Newest to Oldest' : 'Oldest to Newest'}
                 </button>
             </div>
             {sortedArticles.length === 0 ? (
-                <p>No articles or tutorials available at this time.</p>
+                <p>No articles or tutorials that match your search</p>
             ) : (
                 <div className="article-container section">
                     {sortedArticles.map((resource) => (
@@ -108,9 +106,6 @@ const ResourcesLibrary = ({searchTerm}) => {
                         </div>
                     ))}
                 </div>
-               
-                
-                
             )}
         </div>
     );

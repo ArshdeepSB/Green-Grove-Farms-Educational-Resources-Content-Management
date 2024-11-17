@@ -24,7 +24,7 @@ function App() {
       <Link to="/events">Admin Events</Link>
       <Link to="/admin-login">Admin User</Link>
       <button className="role-switch-btn" onClick={() => setIsAdmin(false)}>
-          Switch to User
+          Admin
       </button>
     </nav>
   );
@@ -35,7 +35,7 @@ function App() {
       <Link to="/user-events">Events</Link>
       <Link to="/user-login">User </Link>
       <button className="role-switch-btn" onClick={() => setIsAdmin(true)}>
-          Switch to Admin
+          User
       </button>
     </nav>
   );

@@ -5,6 +5,8 @@ import './resourcepage.css'; // Import the CSS file
 const ResourcesLibrary = ({searchTerm}) => {
     const [resources, setResources] = useState([]);
     const [error, setError] = useState('');
+    const [sortVideosByNewest, setSortVideosByNewest] = useState(false);
+    const [sortArticlesByNewest, setSortArticlesByNewest] = useState(false);
 
     // Fetch all resources on component mount
     useEffect(() => {
@@ -30,17 +32,38 @@ const ResourcesLibrary = ({searchTerm}) => {
     const articles = filteredResources.filter(resource => resource.youtubeId === ''); // Articles when youtubeId is '0'
     const videos = filteredResources.filter(resource => resource.youtubeId !== '0' && resource.youtubeId); // Videos when youtubeId is not '0'
 
+    const sortedVideos = videos.sort((a, b) => {
+        const dateA = new Date(a.createDate);
+        const dateB = new Date(b.createDate);
+        return sortVideosByNewest ? dateB - dateA : dateA - dateB;
+    });
+
+    const sortedArticles = articles.sort((a, b) => {
+        const dateA = new Date(a.createDate);
+        const dateB = new Date(b.createDate);
+        return sortArticlesByNewest ? dateB - dateA : dateA - dateB;
+    });
+
     return (
         <div className="container">
             <h1>Resources Library</h1>
             {error && <p className="error-message">{error}</p>}
+
+            <div className="sort-button-container">
+                <button
+                    className="sort-button"
+                    onClick={() => setSortVideosByNewest(!sortVideosByNewest)}
+                >
+                    Sort by {sortVideosByNewest  ? 'Oldest' : 'Newest'}
+                </button>
+            </div>
 
             <h2 className="section-title">Videos</h2>
             {videos.length === 0 ? (
                 <p>No videos available at this time.</p>
             ) : (
                 <div className="video-container">
-                    {videos.map((resource) => (
+                    {sortedVideos.map((resource) => (
                         <div key={resource._id} className="video-item">
                             <h3 style={{ margin: '0' }}>{resource.title}</h3>
                             <p>{resource.description}</p>
@@ -63,11 +86,19 @@ const ResourcesLibrary = ({searchTerm}) => {
             )}
 
             <h2 className="article-title">Articles & Tutorials</h2>
-            {articles.length === 0 ? (
+            <div className="sort-button-container">
+                <button
+                    className="sort-button"
+                    onClick={() => setSortArticlesByNewest(!sortArticlesByNewest)}
+                >
+                    Sort Articles by {sortArticlesByNewest ? 'Oldest' : 'Newest'}
+                </button>
+            </div>
+            {sortedArticles.length === 0 ? (
                 <p>No articles or tutorials available at this time.</p>
             ) : (
                 <div className="article-container section">
-                    {articles.map((resource) => (
+                    {sortedArticles.map((resource) => (
                         <div key={resource._id} className="article-item">
                             <h3 style={{ margin: '0' }}>{resource.title}</h3>
                             <p>{resource.description}</p>

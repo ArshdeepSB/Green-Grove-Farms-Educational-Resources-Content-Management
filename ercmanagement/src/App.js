@@ -20,7 +20,6 @@ function App() {
       <div>
         <nav>
           <Link to="/ResourcesLibrary">Resource Library</Link>
-          <Link to="/">Register For Events</Link>
           <Link to="/AdminRes">AdminRes</Link>
           <Link to="/admin-login">Admin User</Link>
           <Link to="/events">Events</Link>
@@ -38,7 +37,7 @@ function App() {
           <Route path="/login" element={<Login />}/>
           <Route path="/signup" element={<Signup />}/>
           <Route path="/events" element={<EventsList />} />
-          <Route path="/event-registration" element={<EventRegistrationPage/>} />
+          <Route path="/event-registration" element={<EventRegistrationPage />} />
 
         </Routes>
       </div>

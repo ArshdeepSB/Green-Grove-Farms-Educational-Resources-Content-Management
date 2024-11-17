@@ -207,6 +207,47 @@ app.get('/api/resourceInfo/:id', async (req, res) => {
     }
 });
 
+// Update a resource
+app.put('/api/resourceInfo/:id', async (req, res) => {
+    const { id } = req.params;
+    const { title, link, description, youtubeId } = req.body;
+
+    try {
+        const updatedResource = await Resource.findByIdAndUpdate(
+            id,
+            { title, link, description, youtubeId },
+            { new: true } // Return the updated document
+        );
+
+        if (!updatedResource) {
+            return res.status(404).json({ message: 'Resource not found' });
+        }
+
+        res.status(200).json(updatedResource);
+    } catch (err) {
+        console.error('Error updating resource:', err);
+        res.status(500).json({ message: 'Error updating resource' });
+    }
+});
+
+// Delete a resource
+app.delete('/api/resourceInfo/:id', async (req, res) => {
+    const { id } = req.params;
+
+    try {
+        const deletedResource = await Resource.findByIdAndDelete(id);
+
+        if (!deletedResource) {
+            return res.status(404).json({ message: 'Resource not found' });
+        }
+
+        res.status(200).json({ message: 'Resource deleted successfully' });
+    } catch (error) {
+        console.error('Error deleting resource:', error);
+        res.status(500).json({ message: 'Error deleting resource' });
+    }
+});
+
 //Route for creating a new event registration
 app.post('/api/registerEvent', async (req, res) => {
     const {  name, email, eventId } = req.body;

@@ -47,7 +47,7 @@ const EventsList = () => {
 
     const handleDeleteEvent = async (eventId) => {
         try {
-            await axios.delete(`/api/events/${eventId}`);
+            await axios.delete(`http://localhost:5002/api/events/${eventId}`);
             setEvents(events.filter(event => event._id !== eventId));
         } catch (error) {
             console.error('Error deleting event:', error);
@@ -62,9 +62,10 @@ const EventsList = () => {
     const handleUpdateEvent = async (e) => {
         e.preventDefault();
         try {
-            const response = await axios.put(`https://localhost:5002/api/events/${editEvent._id}`, editEvent);
+            const response = await axios.put(`http://localhost:5002/api/events/${editEvent._id}`, editEvent);
             setEvents(events.map(event => (event._id === editEvent._id ? response.data : event)));
             setEditEvent(null);
+            
             setShowEditModal(false); // Close modal after updating
         } catch (error) {
             console.error('Error updating event:', error);

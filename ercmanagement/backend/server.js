@@ -210,6 +210,7 @@ app.get('/api/resourceInfo/:id', async (req, res) => {
 //Route for creating a new event registration
 app.post('/api/registerEvent', async (req, res) => {
     const {  name, email, eventId } = req.body;
+    console.log('Received data:', req.body); // Log the received data
 
     if (!name  || !email || !eventId) {
         return res.status(400).json({ message: 'All fields are required' });
@@ -272,7 +273,7 @@ app.post('/api/createEvent', async (req, res) => {
 });
 
 // Update an event
-app.put('api/events/:id', async (req, res) => {
+app.put('/api/events/:id', async (req, res) => {
   try {
     const updatedEvent = await Event.findByIdAndUpdate(req.params.id, req.body, { new: true });
     if (!updatedEvent) return res.status(404).json({ message: 'Event not found' });
@@ -283,7 +284,7 @@ app.put('api/events/:id', async (req, res) => {
 });
 
 // Delete an event
-app.delete('api/events/:id', async (req, res) => {
+app.delete('/api/events/:id', async (req, res) => {
   try {
     const deletedEvent = await Event.findByIdAndDelete(req.params.id);
     if (!deletedEvent) return res.status(404).json({ message: 'Event not found' });

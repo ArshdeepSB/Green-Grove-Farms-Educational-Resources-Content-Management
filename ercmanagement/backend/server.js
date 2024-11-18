@@ -2,6 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const cors = require('cors');
+const TempMail = require('temp-mail-api');
 
 const app = express();
 app.use(cors());
@@ -312,6 +313,20 @@ app.get('/api/regInfo', async (req, res) => {
         res.status(200).json(registrations);
     } catch (error) {
         res.status(500).send('Error getting registrations: ' + error.message);
+    }
+});
+
+
+
+// Route to generate a temporary email address
+app.get('/generate-temp-email', async (req, res) => {
+    try {
+        const tempMail = new TempMail();
+        const email = await tempMail.getEmail(); // Get a temporary email
+        res.json({ temporaryEmail: email });
+    } catch (error) {
+        console.error('Error generating temporary email:', error);
+        res.status(500).send('Failed to generate temporary email');
     }
 });
 

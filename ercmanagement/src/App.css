@@ -1,3 +1,7 @@
+@import url('https://fonts.googleapis.com/css2?family=Anton&family=Faculty+Glyphic&family=Orbitron:wght@400..900&display=swap');
+*{
+  
+}
 .App {
   text-align: center;
 }
@@ -60,7 +64,7 @@ nav a {
 }
 
 nav a:hover {
-  color: #007bff;
+  color: #06a636;
 }
 
 nav a.active {
@@ -94,7 +98,7 @@ nav .auth-links {
   background: transparent;
   cursor: pointer;
   font-size: 18px;
-  color: #007bff;
+  color: #0da137;
   margin-left: 8px;
 }
 

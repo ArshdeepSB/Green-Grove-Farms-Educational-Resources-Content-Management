@@ -2,6 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const cors = require('cors');
+const TempMail = require('temp-mail-api');
 
 const app = express();
 app.use(cors());
@@ -251,6 +252,7 @@ app.delete('/api/resourceInfo/:id', async (req, res) => {
 //Route for creating a new event registration
 app.post('/api/registerEvent', async (req, res) => {
     const {  name, email, eventId } = req.body;
+    console.log('Received data:', req.body); // Log the received data
 
     if (!name  || !email || !eventId) {
         return res.status(400).json({ message: 'All fields are required' });
@@ -313,7 +315,7 @@ app.post('/api/createEvent', async (req, res) => {
 });
 
 // Update an event
-app.put('api/events/:id', async (req, res) => {
+app.put('/api/events/:id', async (req, res) => {
   try {
     const updatedEvent = await Event.findByIdAndUpdate(req.params.id, req.body, { new: true });
     if (!updatedEvent) return res.status(404).json({ message: 'Event not found' });
@@ -324,7 +326,7 @@ app.put('api/events/:id', async (req, res) => {
 });
 
 // Delete an event
-app.delete('api/events/:id', async (req, res) => {
+app.delete('/api/events/:id', async (req, res) => {
   try {
     const deletedEvent = await Event.findByIdAndDelete(req.params.id);
     if (!deletedEvent) return res.status(404).json({ message: 'Event not found' });
@@ -352,6 +354,20 @@ app.get('/api/regInfo', async (req, res) => {
         res.status(200).json(registrations);
     } catch (error) {
         res.status(500).send('Error getting registrations: ' + error.message);
+    }
+});
+
+
+
+// Route to generate a temporary email address
+app.get('/generate-temp-email', async (req, res) => {
+    try {
+        const tempMail = new TempMail();
+        const email = await tempMail.getEmail(); // Get a temporary email
+        res.json({ temporaryEmail: email });
+    } catch (error) {
+        console.error('Error generating temporary email:', error);
+        res.status(500).send('Failed to generate temporary email');
     }
 });
 

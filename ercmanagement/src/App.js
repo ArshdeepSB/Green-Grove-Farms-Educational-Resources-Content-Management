@@ -49,14 +49,8 @@ function App() {
         )}
         <Routes>
           <Route path="/ResourcesLibrary" element={<ResourcesLibrary searchTerm={searchTerm} />}  />
-          <Route path="/admin-login" component={<AdminLogin /> } />
-          <Route path="/user-login" component={<UserLogin />} />
-          <Route path="/AdminRes" element={<AdminRes />} />
-          <Route path="/AdminResi" element={<AdminResi />} />
-          <Route path="/login" element={<Login />}/>
-          <Route path="/signup" element={<Signup />}/>
           <Route path="/events" element={<EventsList />} />
-          
+          <Route path="/AdminRes" element={<AdminRes />} />
 
           <Route path="/user-events" element={< UEventsList/>} />
 

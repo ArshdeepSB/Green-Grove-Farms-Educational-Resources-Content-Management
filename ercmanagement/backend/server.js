@@ -2,6 +2,8 @@ const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const cors = require('cors');
+const express = require('express');
+const TempMail = require('temp-mail-api');
 
 const app = express();
 app.use(cors());
@@ -283,23 +285,18 @@ app.put('api/events/:id', async (req, res) => {
 });
 
 // Delete an event
-app.delete('api/events/:id', async (req, res) => {
-  try {
-    const deletedEvent = await Event.findByIdAndDelete(req.params.id);
-    if (!deletedEvent) return res.status(404).json({ message: 'Event not found' });
-    res.json({ message: 'Event deleted successfully' });
-  } catch (err) {
-    res.status(500).json({ message: 'Error deleting event' });
-  }
-});
-
-module.exports = {
-    Resource,
-    User,
-    Event,
-    EventRegistration,
-    app
-};
+app.delete('/api/events/:id', async (req, res) => {
+    try {
+      const deletedEvent = await Event.findByIdAndDelete(req.params.id);
+      if (!deletedEvent) return res.status(404).json({ message: 'Event not found' });
+      res.json({ message: 'Event deleted successfully' });
+    } catch (err) {
+      res.status(500).json({ message: 'Error deleting event' });
+      console.error('Error deleting event:', err);
+    }
+  });
+  
+  module.exports = app;
 
 
 // Route for retrieving all event registrations
@@ -311,6 +308,20 @@ app.get('/api/regInfo', async (req, res) => {
         res.status(200).json(registrations);
     } catch (error) {
         res.status(500).send('Error getting registrations: ' + error.message);
+    }
+});
+
+
+
+// Route to generate a temporary email address
+app.get('/generate-temp-email', async (req, res) => {
+    try {
+        const tempMail = new TempMail();
+        const email = await tempMail.getEmail(); // Get a temporary email
+        res.json({ temporaryEmail: email });
+    } catch (error) {
+        console.error('Error generating temporary email:', error);
+        res.status(500).send('Failed to generate temporary email');
     }
 });
 

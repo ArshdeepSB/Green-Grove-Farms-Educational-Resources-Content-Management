@@ -8,6 +8,7 @@ const ResourcesLibrary = ({ searchTerm }) => {
     const [sortVideosByNewest, setSortVideosByNewest] = useState(false);
     const [sortArticlesByNewest, setSortArticlesByNewest] = useState(false);
 
+
     // Fetch all resources on component mount
     useEffect(() => {
         const fetchResources = async () => {
@@ -37,15 +38,19 @@ const ResourcesLibrary = ({ searchTerm }) => {
         return sortVideosByNewest ? dateB - dateA : dateA - dateB;
     });
 
+
     const sortedArticles = articles.sort((a, b) => {
         const dateA = new Date(a.createDate);
         const dateB = new Date(b.createDate);
         return sortArticlesByNewest ? dateB - dateA : dateA - dateB;
     });
 
+
     return (
+        
         <div className="container">
-            <h1>Resources Library</h1>
+            <h1>Green Groves Farm Education Platform</h1>
+
             {error && <p className="error-message">{error}</p>}
 
             <h2 className="section-title">Videos</h2>

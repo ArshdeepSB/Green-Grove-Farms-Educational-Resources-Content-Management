@@ -21,6 +21,7 @@ function App() {
         <nav>
           <Link to="/ResourcesLibrary">Resource Library</Link>
           <Link to="/events">Admin Events</Link>
+          <Link to="/AdminRes">Admin Resources</Link>
           <Link to="/user-events">Events</Link>
           <SearchBar searchTerm={searchTerm} onSearchChange={setSearchTerm} />
         </nav>
@@ -28,7 +29,7 @@ function App() {
         <Routes>
           <Route path="/ResourcesLibrary" element={<ResourcesLibrary searchTerm={searchTerm} />}  />
           <Route path="/events" element={<EventsList />} />
-          
+          <Route path="/AdminRes" element={<AdminRes />} />
 
           <Route path="/user-events" element={< UEventsList/>} />
 

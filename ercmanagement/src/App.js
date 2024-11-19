@@ -52,7 +52,7 @@ function App() {
           <Route path="/events" element={<EventsList />} />
           <Route path="/AdminRes" element={<AdminRes />} />
 
-          <Route path="/user-events" element={< UEventsList/>} />
+          <Route path="/user-events" element={< UEventsList searchTerm={searchTerm}/>} />
 
 
         </Routes>

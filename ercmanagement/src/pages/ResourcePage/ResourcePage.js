@@ -8,6 +8,8 @@ const ResourcesLibrary = ({ searchTerm }) => {
     const [sortVideosMode, setSortVideosMode] = useState('');
     const [sortArticlesMode, setSortArticlesMode] = useState('');
 
+    
+
 
     // Fetch all resources on component mount
     useEffect(() => {
@@ -57,7 +59,7 @@ const ResourcesLibrary = ({ searchTerm }) => {
     return (
         
         <div className="container">
-            <h1>Green Groves Farm Education Platform</h1>
+            <h1>Welcome to Green Groves Farm Education Platform</h1>
 
             {error && <p className="error-message">{error}</p>}
 

@@ -90,6 +90,7 @@ const ResourcesLibrary = ({ searchTerm }) => {
                         <div key={resource._id} className="video-item">
                             <h3 style={{ margin: '0' }}>{resource.title}</h3>
                             <p>{resource.description}</p>
+                            <h4>Video topic: {resource.topic}</h4>
                             <a href={resource.link} target="_blank" rel="noopener noreferrer" className="resource-link">
                                 Visit Resource
                             </a>
@@ -137,6 +138,7 @@ const ResourcesLibrary = ({ searchTerm }) => {
                         <div key={resource._id} className="article-item">
                             <h3 style={{ margin: '0' }}>{resource.title}</h3>
                             <p>{resource.description}</p>
+                            <h4>Topic: {resource.topic}</h4>
                             <a href={resource.link} target="_blank" rel="noopener noreferrer" className="resource-link">
                                 Visit Resource
                             </a>

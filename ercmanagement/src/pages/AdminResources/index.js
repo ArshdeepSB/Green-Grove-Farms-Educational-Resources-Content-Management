@@ -8,6 +8,7 @@ const AdminRes = () => {
         title: '',
         link: '',
         description: '',
+        topic: '',
         youtubeId: '',
     });
     const [editResource, setEditResource] = useState(null);
@@ -41,7 +42,7 @@ const AdminRes = () => {
         try {
             const response = await axios.post('http://localhost:5002/api/createResource', newResource);
             setResources([...resources, response.data]);
-            setNewResource({ title: '', link: '', description: '', youtubeId: '' });
+            setNewResource({ title: '', link: '', description: '', topic: '', youtubeId: '' });
             setShowCreateModal(false); // Close modal after creating
         } catch (error) {
             console.error('Error creating resource:', error);
@@ -90,6 +91,7 @@ const AdminRes = () => {
                     <div key={video._id} className="resource-card">
                         <h3>{video.title}</h3>
                         <p>{video.description}</p>
+                        <h4>Topic: {video.topic}</h4>
                         <p>
                             <a href={video.link} target="_blank" rel="noopener noreferrer">
                                 Visit Resource
@@ -119,6 +121,8 @@ const AdminRes = () => {
                     <div key={article._id} className="resource-card">
                         <h3>{article.title}</h3>
                         <p>{article.description}</p>
+                        <h4>Topic: {article.topic}</h4>
+
                         <p>
                             <a href={article.link} target="_blank" rel="noopener noreferrer">
                                 Visit Resource
@@ -174,6 +178,15 @@ const AdminRes = () => {
                                     value={newResource.description}
                                     onChange={handleInputChange}
                                     required
+                                />
+                            </label>
+                            <br />
+                            <label>
+                                Topic:
+                                <input name="topic"
+                                value={newResource.topic}
+                                onChange={handleInputChange}
+                                required
                                 />
                             </label>
                             <br />
@@ -234,6 +247,15 @@ const AdminRes = () => {
                                 />
                             </label>
                             <br />
+                            <label>
+                                Topic:
+                                <input name="topic"
+                                value={editResource.topic}
+                                onChange={handleEditInputChange}
+                                required
+                                />
+                            </label>
+                            <br/>
                             <label>
                                 YouTube ID:
                                 <input

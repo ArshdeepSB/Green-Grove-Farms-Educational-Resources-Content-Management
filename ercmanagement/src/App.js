@@ -48,6 +48,7 @@ function App() {
           <SearchBar searchTerm={searchTerm} onSearchChange={setSearchTerm} />
         )}
         <Routes>
+          <Route path="/" element={<ResourcesLibrary searchTerm={searchTerm} />} />
           <Route path="/ResourcesLibrary" element={<ResourcesLibrary searchTerm={searchTerm} />}  />
           <Route path="/events" element={<EventsList />} />
           <Route path="/AdminRes" element={<AdminRes />} />

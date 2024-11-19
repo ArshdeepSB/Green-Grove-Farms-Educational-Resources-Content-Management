@@ -21,6 +21,7 @@ const resourceSchema = new mongoose.Schema({
     title: { type: String, required: true },
     link: { type: String, required: true },
     description: { type: String, required: true },
+    topic: {type: String, required: true},
     youtubeId: { type: String, required: false },
     createDate: { type: Date, default: Date.now } 
 });
@@ -173,8 +174,8 @@ const isAdmin = (req, res, next) => {
 
 // Define a route to handle resource creation
 app.post('/api/createResource', async (req, res) => {
-    const { title, link, description, youtubeId } = req.body;
-    const newResource = new Resource({ title, link, description, youtubeId });
+    const { title, link, description,topic, youtubeId } = req.body;
+    const newResource = new Resource({ title, link, description, topic, youtubeId });
 
     try {
         await newResource.save();
@@ -211,12 +212,12 @@ app.get('/api/resourceInfo/:id', async (req, res) => {
 // Update a resource
 app.put('/api/resourceInfo/:id', async (req, res) => {
     const { id } = req.params;
-    const { title, link, description, youtubeId } = req.body;
+    const { title, link, description, topic ,youtubeId } = req.body;
 
     try {
         const updatedResource = await Resource.findByIdAndUpdate(
             id,
-            { title, link, description, youtubeId },
+            { title, link, description, topic , youtubeId },
             { new: true } // Return the updated document
         );
 

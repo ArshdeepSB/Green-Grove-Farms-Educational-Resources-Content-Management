@@ -120,13 +120,13 @@ const ResourcesLibrary = ({ searchTerm }) => {
                     className={`sort-button ${sortArticlesMode === 'newest' ? 'active' : ''}`}
                     onClick={() => setSortArticlesMode('newest')}
                 >
-                    Sort by Newest
+                    Sort Newest
                 </button>
                 <button
                     className={`sort-button ${sortArticlesMode === 'oldest' ? 'active' : ''}`}
                     onClick={() => setSortArticlesMode('oldest')}
                 >
-                    Sort by Oldest
+                    Sort Oldest
                 </button>
             </div>
             {sortedArticles.length === 0 ? (

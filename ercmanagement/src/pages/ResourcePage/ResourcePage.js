@@ -5,8 +5,8 @@ import './resourcepage.css'; // Import the CSS file
 const ResourcesLibrary = ({ searchTerm }) => {
     const [resources, setResources] = useState([]);
     const [error, setError] = useState('');
-    const [sortVideosByNewest, setSortVideosByNewest] = useState(false);
-    const [sortArticlesByNewest, setSortArticlesByNewest] = useState(false);
+    const [sortVideosMode, setSortVideosMode] = useState('');
+    const [sortArticlesMode, setSortArticlesMode] = useState('');
 
 
     // Fetch all resources on component mount
@@ -33,18 +33,26 @@ const ResourcesLibrary = ({ searchTerm }) => {
     const videos = filteredResources.filter(resource => resource.youtubeId !== '0' && resource.youtubeId); // Videos when youtubeId is not '0'
 
     const sortedVideos = videos.sort((a, b) => {
-        const dateA = new Date(a.createDate);
-        const dateB = new Date(b.createDate);
-        return sortVideosByNewest ? dateB - dateA : dateA - dateB;
+        if (sortVideosMode === 'alphabetical') {
+            return a.title.toLowerCase().localeCompare(b.title.toLowerCase());
+        } else if (sortVideosMode === 'newest') {
+            return new Date(b.createDate) - new Date(a.createDate);
+        } else if (sortVideosMode === 'oldest') {
+            return new Date(a.createDate) - new Date(b.createDate);
+        }
+        return 0;
     });
-
 
     const sortedArticles = articles.sort((a, b) => {
-        const dateA = new Date(a.createDate);
-        const dateB = new Date(b.createDate);
-        return sortArticlesByNewest ? dateB - dateA : dateA - dateB;
+        if (sortArticlesMode === 'alphabetical') {
+            return a.title.toLowerCase().localeCompare(b.title.toLowerCase());
+        } else if (sortArticlesMode === 'newest') {
+            return new Date(b.createDate) - new Date(a.createDate);
+        } else if (sortArticlesMode === 'oldest') {
+            return new Date(a.createDate) - new Date(b.createDate);
+        }
+        return 0;
     });
-
 
     return (
         
@@ -56,10 +64,22 @@ const ResourcesLibrary = ({ searchTerm }) => {
             <h2 className="section-title">Videos</h2>
             <div className="sort-button-container">
                 <button
-                    className={`sort-button ${sortVideosByNewest ? 'active' : ''}`}
-                    onClick={() => setSortVideosByNewest(!sortVideosByNewest)}
+                    className={`sort-button ${sortVideosMode === 'alphabetical' ? 'active' : ''}`}
+                    onClick={() => setSortVideosMode('alphabetical')}
                 >
-                    {sortVideosByNewest ? 'Newest to Oldest' : 'Oldest to Newest'}
+                    Sort Alphabetically
+                </button>
+                <button
+                    className={`sort-button ${sortVideosMode === 'newest' ? 'active' : ''}`}
+                    onClick={() => setSortVideosMode('newest')}
+                >
+                    Sort by Newest
+                </button>
+                <button
+                    className={`sort-button ${sortVideosMode === 'oldest' ? 'active' : ''}`}
+                    onClick={() => setSortVideosMode('oldest')}
+                >
+                    Sort by Oldest
                 </button>
             </div>
             {videos.length === 0 ? (
@@ -91,10 +111,22 @@ const ResourcesLibrary = ({ searchTerm }) => {
             <h2 className="article-title">Articles & Tutorials</h2>
             <div className="sort-button-container">
                 <button
-                    className={`sort-button ${sortArticlesByNewest ? 'active' : ''}`}
-                    onClick={() => setSortArticlesByNewest(!sortArticlesByNewest)}
+                    className={`sort-button ${sortArticlesMode === 'alphabetical' ? 'active' : ''}`}
+                    onClick={() => setSortArticlesMode('alphabetical')}
                 >
-                    {sortArticlesByNewest ? 'Newest to Oldest' : 'Oldest to Newest'}
+                    Sort Alphabetically
+                </button>
+                <button
+                    className={`sort-button ${sortArticlesMode === 'newest' ? 'active' : ''}`}
+                    onClick={() => setSortArticlesMode('newest')}
+                >
+                    Sort by Newest
+                </button>
+                <button
+                    className={`sort-button ${sortArticlesMode === 'oldest' ? 'active' : ''}`}
+                    onClick={() => setSortArticlesMode('oldest')}
+                >
+                    Sort by Oldest
                 </button>
             </div>
             {sortedArticles.length === 0 ? (

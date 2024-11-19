@@ -24,6 +24,9 @@ h1 {
   font-size: 16px;
   margin-bottom: 10px;
 }
+h2,h3{
+  color: #01ac26;
+}
 
 /* Section title styles */
 .section-title,
@@ -80,7 +83,7 @@ h1 {
 .article-item h3 {
   font-size: 18px;
   font-weight: bold;
-  color: #333;
+  color: #01ac26;
   margin-bottom: 8px;
 }
 

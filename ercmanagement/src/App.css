@@ -90,7 +90,7 @@
 
 /* Search Bar component style within Navbar */
 .search-bar{
-  position: fixed;
+  position: absolute;
 }
 .search-bar input[type="text"] {
   width: 100%;

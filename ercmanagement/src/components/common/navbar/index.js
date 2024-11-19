@@ -3,6 +3,8 @@ import { Link } from 'react-router-dom';
 import './styles.css';
 
 const Navbar = ({ isAdmin, onRoleSwitch }) => {
+    
+    
   return (
     // <nav className='navbar'>
     //   <Link to="/">Home</Link>

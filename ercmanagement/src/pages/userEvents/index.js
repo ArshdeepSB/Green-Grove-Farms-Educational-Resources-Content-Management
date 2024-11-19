@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import './styles.css';
 
-const UEventsList = () => {
+const UEventsList = ({searchTerm}) => {
     const [events, setEvents] = useState([]);
 
     const [showRegisterModal, setShowRegisterModal] = useState(false);
@@ -25,7 +25,9 @@ const UEventsList = () => {
     }, []);
 
 
-
+    const filteredEvents = events.filter( event =>
+        event.name.toLowerCase().includes(searchTerm.toLowerCase())
+    );
 
 
     const handleRegisterClick = (event) => {
@@ -49,7 +51,7 @@ const UEventsList = () => {
             <h2>All Events</h2>
 
             <div className="events-grid">
-                {events.map(event => (
+                {filteredEvents.map(event => (
                     <div key={event._id} className="event-card">
                         <h3>{event.name}</h3>
                         <p>{event.description}</p>

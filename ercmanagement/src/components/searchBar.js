@@ -20,7 +20,7 @@ const styles = {
     alignItems: 'center',
     borderRadius: '8px',
     overflow: 'hidden',
-    backgroundColor: 'white',
+    backgroundColor: '#eaf3f9',
     padding: '5px',
   },
   searchInput: {

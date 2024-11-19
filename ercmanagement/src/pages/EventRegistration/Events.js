@@ -15,6 +15,9 @@ const EventsList = () => {
     const [email, setEmail] = useState('');
     const [message, setMessage] = useState('');
 
+    const [registeredUsers, setRegisteredUsers] = useState([]);
+    const [showRegisteredUsersModal, setShowRegisteredUsersModal] = useState(false);
+
     useEffect(() => {
         const fetchEvents = async () => {
             try {
@@ -93,6 +96,17 @@ const EventsList = () => {
         }
     };
 
+    const handleShowRegisteredUsers = async (eventId) => {
+        try {
+            const response = await axios.get(`http://localhost:5002/api/regInfo/${eventId}`);
+            setRegisteredUsers(response.data);
+            console.log('Registered users:', response.data);
+            setShowRegisteredUsersModal(true);
+        } catch (error) {
+            console.error('Error fetching registered users:', error);
+        }
+    };
+
     return (
         <div className="events-container">
             <h2>All Events</h2>
@@ -108,6 +122,7 @@ const EventsList = () => {
                             <button onClick={() => handleRegisterClick(event)}>Register</button>
                             <button onClick={() => handleDeleteEvent(event._id)}>Delete</button>
                             <button onClick={() => handleEditEvent(event)}>Edit</button>
+                            <button onClick={() => handleShowRegisteredUsers(event._id)}>Registered Users</button>
                         </div>
                     </div>
                 ))}
@@ -215,6 +230,22 @@ const EventsList = () => {
                             <button type="submit">Register</button>
                         </form>
                         {message && <p>{message}</p>}
+                    </div>
+                </div>
+            )}
+
+            {showRegisteredUsersModal && (
+                <div className="modal">
+                    <div className="modal-content">
+                        <span className="close" onClick={() => setShowRegisteredUsersModal(false)}>&times;</span>
+                        <h3>Registered Users</h3>
+                        <ul>
+                            {registeredUsers.map(user => (
+                                <li key={user._id}>
+                                    {user.name} - {user.email} - {new Date(user.registration_date).toLocaleDateString()}
+                                </li>
+                            ))}
+                        </ul>
                     </div>
                 </div>
             )}

@@ -253,7 +253,7 @@ app.delete('/api/resourceInfo/:id', async (req, res) => {
 //Route for creating a new event registration
 app.post('/api/registerEvent', async (req, res) => {
     const {  name, email, eventId } = req.body;
-    console.log('Received data:', req.body); // Log the received data
+ 
 
     if (!name  || !email || !eventId) {
         return res.status(400).json({ message: 'All fields are required' });
@@ -263,6 +263,7 @@ app.post('/api/registerEvent', async (req, res) => {
 
     try {
         const savedRegistration = await newRegistration.save();
+
         res.status(201).json(savedRegistration);
     } catch (err) {
         res.status(400).json({ message: 'Error registering for event', error: err });
@@ -297,14 +298,14 @@ app.get('/api/events/:id', async (req, res) => {
 // Create an event
 app.post('/api/createEvent', async (req, res) => {
   const { name, description, date, location } = req.body;
-  console.log('Received data:', req.body); // Log the received data
+  
 
   if (!name || !description || !date || !location) {
     return res.status(400).json({ message: 'All fields are required' });
   }
 
   const newEvent = new Event({ name, description, date, location });
-  console.log('New event:', newEvent); // Log the new event object
+ 
 
   try {
     const savedEvent = await newEvent.save();
@@ -346,19 +347,6 @@ module.exports = {
 };
 
 
-// Route for retrieving all event registrations
-app.get('/api/regInfo', async (req, res) => {
-    try {
-        const registrations = await EventRegistration.find()
-            .populate('event_id', 'name date'); // Populate event information
-
-        res.status(200).json(registrations);
-    } catch (error) {
-        res.status(500).send('Error getting registrations: ' + error.message);
-    }
-});
-
-
 
 // Route to generate a temporary email address
 app.get('/generate-temp-email', async (req, res) => {
@@ -373,18 +361,13 @@ app.get('/generate-temp-email', async (req, res) => {
 });
 
 // Route to get a registration by ID
-app.get('/api/regInfo/:id', async (req, res) => {
+app.get('/api/regInfo/:eventId', async (req, res) => {
+   
     try {
-        const registration = await EventRegistration.findById(req.params.id)
-            .populate('event_id', 'name date'); // Populate event information
-
-        if (!registration) {
-            return res.status(404).send('Registration not found');
-        }
-
-        res.status(200).json(registration);
-    } catch (error) {
-        res.status(500).send('Error getting registration: ' + error.message);
+        const registrations = await EventRegistration.find({ event_id: req.params.eventId });
+        res.status(200).json(registrations);
+    } catch (err) {
+        res.status(500).send('Error fetching registered users', err);
     }
 });
 

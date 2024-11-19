@@ -46,7 +46,7 @@
 }
 
 /* Navbar styles */
-nav {
+.Navbar {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -58,7 +58,7 @@ nav {
   z-index: 1000;
 }
 
-nav a {
+.Navbar a {
   color: #333;
   text-decoration: none;
   margin: 0 15px;
@@ -67,28 +67,31 @@ nav a {
   transition: color 0.3s;
 }
 
-nav a:hover {
+.Navbar a:hover {
   color: #06a636;
 }
 
-nav a.active {
+.Navbar a.active {
   color: #007bff;
   border-bottom: 2px solid #007bff;
   padding-bottom: 2px;
 }
 
-nav .search-bar {
+.Navbar .search-bar {
   flex-grow: 1;
   max-width: 400px;
   margin-left: 20px;
 }
 
-nav .auth-links {
+.Navbar .auth-links {
   display: flex;
   gap: 15px;
 }
 
 /* Search Bar component style within Navbar */
+.search-bar{
+  position: fixed;
+}
 .search-bar input[type="text"] {
   width: 100%;
   padding: 8px 12px;

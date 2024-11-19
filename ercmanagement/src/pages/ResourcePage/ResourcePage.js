@@ -7,6 +7,9 @@ const ResourcesLibrary = ({ searchTerm }) => {
     const [error, setError] = useState('');
     const [sortVideosMode, setSortVideosMode] = useState('');
     const [sortArticlesMode, setSortArticlesMode] = useState('');
+    const [selectedVideosTopicFilter, setSelectedVideosTopicFilter] = useState('');
+    const [selectedArticlesTopicFilter, setSelectedArticlesTopicFilter] = useState('');
+
 
     
 
@@ -29,10 +32,12 @@ const ResourcesLibrary = ({ searchTerm }) => {
     const filteredResources = resources.filter(resource =>
         resource.title.toLowerCase().includes(searchTerm.toLowerCase())
     );
-
     // Filter resources into articles and videos
-    const articles = filteredResources.filter(resource => resource.youtubeId === ''); // Articles when youtubeId is '0'
-    const videos = filteredResources.filter(resource => resource.youtubeId !== '0' && resource.youtubeId); // Videos when youtubeId is not '0'
+    const articles = filteredResources.filter(resource => resource.youtubeId === '' && 
+        (selectedArticlesTopicFilter === '' || resource.topic === selectedArticlesTopicFilter)); // Articles when youtubeId is '0'
+
+    const videos = filteredResources.filter(resource => resource.youtubeId !== '0' && resource.youtubeId && 
+        (selectedVideosTopicFilter === '' || resource.topic === selectedVideosTopicFilter)); // Videos when youtubeId is not '0'
 
     const sortedVideos = videos.sort((a, b) => {
         if (sortVideosMode === 'alphabetical') {
@@ -65,6 +70,21 @@ const ResourcesLibrary = ({ searchTerm }) => {
 
             <h2 className="section-title">Videos</h2>
             <div className="sort-button-container">
+                <div className="topic-filter">
+                    <label htmlFor="topic-select"></label>
+                    <select
+                        id="topic-select"
+                        value={selectedVideosTopicFilter}
+                        className="sort-button"
+                        onChange={(e) => setSelectedVideosTopicFilter(e.target.value)}
+                    >
+                        <option value="">All Topics</option>
+                        <option value="Climate">Climate</option>
+                        <option value="Fertilizer">Fertilizer</option>
+                        <option value="Farming">Farming</option>
+                        <option value="Animals">Animals</option>
+                    </select>
+                </div>
                 <button
                     className={`sort-button ${sortVideosMode === 'alphabetical' ? 'active' : ''}`}
                     onClick={() => setSortVideosMode('alphabetical')}
@@ -113,6 +133,21 @@ const ResourcesLibrary = ({ searchTerm }) => {
 
             <h2 className="article-title">Articles & Tutorials</h2>
             <div className="sort-button-container">
+                <div className="topic-filter">
+                    <label htmlFor="topic-select"></label>
+                    <select
+                        id="topic-select"
+                        value={selectedArticlesTopicFilter}
+                        className="sort-button"
+                        onChange={(e) => setSelectedArticlesTopicFilter(e.target.value)}
+                    >
+                        <option value="">All Topics</option>
+                        <option value="Climate">Climate</option>
+                        <option value="Fertilizer">Fertilizer</option>
+                        <option value="Farming">Farming</option>
+                        <option value="Animals">Animals</option>
+                    </select>
+                </div>
                 <button
                     className={`sort-button ${sortArticlesMode === 'alphabetical' ? 'active' : ''}`}
                     onClick={() => setSortArticlesMode('alphabetical')}

@@ -91,6 +91,8 @@ const EventsList = () => {
         try {
             const response = await axios.post('http://localhost:5002/api/registerEvent', { email, name, eventId: selectedEvent._id });
             setMessage(response.data.message || 'Registration successful!');
+            setName('');
+            setEmail('');
         } catch (error) {
             setMessage('Error registering for event: ' + (error.response ? error.response.data.message : error.message));
         }

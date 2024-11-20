@@ -93,6 +93,7 @@ const EventsList = () => {
             setMessage(response.data.message || 'Registration successful!');
             setName('');
             setEmail('');
+            setMessages('');
         } catch (error) {
             setMessage('Error registering for event: ' + (error.response ? error.response.data.message : error.message));
         }

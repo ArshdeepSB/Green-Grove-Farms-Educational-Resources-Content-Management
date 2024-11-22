@@ -42,7 +42,7 @@ const EventsList = () => {
             const response = await axios.post('http://localhost:5002/api/createEvent', newEvent);
             setEvents([...events, response.data]);
             setNewEvent({ name: '', description: '', date: '', location: '' });
-            setShowCreateModal(false); // Close modal after creating
+            setShowCreateModal(false); 
         } catch (error) {
             console.error('Error creating event:', error);
         }
@@ -59,7 +59,7 @@ const EventsList = () => {
 
     const handleEditEvent = (event) => {
         setEditEvent(event);
-        setShowEditModal(true); // Show the edit modal
+        setShowEditModal(true); 
     };
 
     const handleUpdateEvent = async (e) => {
@@ -69,7 +69,7 @@ const EventsList = () => {
             setEvents(events.map(event => (event._id === editEvent._id ? response.data : event)));
             setEditEvent(null);
             
-            setShowEditModal(false); // Close modal after updating
+            setShowEditModal(false);
         } catch (error) {
             console.error('Error updating event:', error);
         }

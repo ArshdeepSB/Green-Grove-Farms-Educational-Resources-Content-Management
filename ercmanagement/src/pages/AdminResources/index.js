@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import './styles.css'; // Assuming the styles.css file is working
+import './styles.css'; 
 
 const AdminRes = () => {
     const [resources, setResources] = useState([]);
@@ -43,7 +43,7 @@ const AdminRes = () => {
             const response = await axios.post('http://localhost:5002/api/createResource', newResource);
             setResources([...resources, response.data]);
             setNewResource({ title: '', link: '', description: '', topic: '', youtubeId: '' });
-            setShowCreateModal(false); // Close modal after creating
+            setShowCreateModal(false); 
         } catch (error) {
             console.error('Error creating resource:', error);
         }
@@ -60,7 +60,7 @@ const AdminRes = () => {
 
     const handleEditResource = (resource) => {
         setEditResource(resource);
-        setShowEditModal(true); // Show the edit modal
+        setShowEditModal(true); 
     };
 
     const handleUpdateResource = async (e) => {
@@ -69,7 +69,7 @@ const AdminRes = () => {
             const response = await axios.put(`http://localhost:5002/api/resourceInfo/${editResource._id}`, editResource);
             setResources(resources.map(resource => (resource._id === editResource._id ? response.data : resource)));
             setEditResource(null);
-            setShowEditModal(false); // Close modal after updating
+            setShowEditModal(false); 
         } catch (error) {
             console.error('Error updating resource:', error);
         }

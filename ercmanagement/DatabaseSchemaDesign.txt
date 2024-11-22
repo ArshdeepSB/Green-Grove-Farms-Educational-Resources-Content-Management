@@ -1,5 +1,43 @@
-ResourceArticles(ArticleID,Title,Description,Link)
-ResourcesTutorials(TutorialID, Title, Description, Link)
-ResourcesVideos(VideoID, Title, Description, YoutubeID)
+Schema:
 
 
+const resourceSchema = new mongoose.Schema({
+    title: { type: String, required: true },
+    link: { type: String, required: true },
+    description: { type: String, required: true },
+    youtubeId: { type: String, required: false },
+    createDate: { type: Date, default: Date.now } 
+});
+
+const eventSchema = new mongoose.Schema({
+  name: { type: String, required: true },
+  description: { type: String, required: true },
+  date: { type: Date, required: true },
+  location: { type: String, required: true },
+});
+
+
+
+
+
+const eventRegistrationSchema = new mongoose.Schema({
+    
+    email: {
+        type: String,
+        required: true,
+        match: [/.+\@.+\..+/, 'Please fill a valid email address'] // Email validation
+    },
+    name: {
+        type:String,
+        required: true,
+    },
+    event_id: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Event',
+        required: true
+    },
+    registration_date: {
+        type: Date,
+        default: Date.now
+    }
+});

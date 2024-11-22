@@ -8,15 +8,12 @@ const app = express();
 app.use(cors());
 app.use(bodyParser.json());
 
-// MongoDB connection URI
 const uri = 'mongodb+srv://tester123:test111@fiascluster.ghdz6o3.mongodb.net/fias-green-info?retryWrites=true&w=majority&appName=FIASCluster';
 
-// Connect to MongoDB
 mongoose.connect(uri)
     .then(() => console.log('MongoDB connected'))
     .catch(err => console.log('MongoDB connection error:', err));
 
-// Define a schema for resources
 const resourceSchema = new mongoose.Schema({
     title: { type: String, required: true },
     link: { type: String, required: true },
@@ -26,7 +23,6 @@ const resourceSchema = new mongoose.Schema({
     createDate: { type: Date, default: Date.now } 
 });
 
-// Create a model for resources
 const Resource = mongoose.model('resourceInfo', resourceSchema);
 
 const userSchema = new mongoose.Schema({
@@ -36,7 +32,6 @@ const userSchema = new mongoose.Schema({
 
 const User = mongoose.model('User', userSchema);
 
-// Define a Schema for events
 const eventSchema = new mongoose.Schema({
   name: { type: String, required: true },
   description: { type: String, required: true },
@@ -45,13 +40,12 @@ const eventSchema = new mongoose.Schema({
 });
 const Event = mongoose.model('Event', eventSchema);
 
-// Define a Schema for event registration
 const eventRegistrationSchema = new mongoose.Schema({
     
     email: {
         type: String,
         required: true,
-        match: [/.+\@.+\..+/, 'Please fill a valid email address'] // Email validation
+        match: [/.+\@.+\..+/, 'Please fill a valid email address'] 
     },
     name: {
         type:String,
@@ -70,16 +64,13 @@ const eventRegistrationSchema = new mongoose.Schema({
 
 const EventRegistration = mongoose.model('EventRegistration', eventRegistrationSchema);
 
-// Signup route
 app.post('/api/signup', async (req, res) => {
     const { email, password } = req.body;
 
     try {
-        // Check if the user already exists
         const existingUser = await User.findOne({ email });
         if (existingUser) return res.status(400).json({ message: 'Email already registered' });
 
-        // Hash password before saving
         const hashedPassword = await bcrypt.hash(password, 10);
         const user = new User({ email, password: hashedPassword });
         await user.save();
@@ -89,7 +80,6 @@ app.post('/api/signup', async (req, res) => {
     }
 });
 
-// Login route
 app.post('/api/login', async (req, res) => {
     const { email, password } = req.body;
 
@@ -97,11 +87,9 @@ app.post('/api/login', async (req, res) => {
         const user = await User.findOne({ email });
         if (!user) return res.status(400).json({ message: 'User not found' });
 
-        // Check if password is correct
         const isMatch = await bcrypt.compare(password, user.password);
         if (!isMatch) return res.status(400).json({ message: 'Invalid credentials' });
 
-        // Generate JWT token
         const token = jwt.sign({ id: user._id }, 'your_jwt_secret', { expiresIn: '1h' });
         res.json({ token });
     } catch (err) {
@@ -124,7 +112,6 @@ app.post('/api/registerUser', async (req, res) => {
         res.status(500).send('Error creating user account');
     }
 });
-// Route to handle admin registration (this should be secured)
 app.post('/api/registerAdmin', async (req, res) => {
     const { fullname, dob, email, password, accountNumber } = req.body;
     const newAdmin = new User({ fullname, dob, email, password, accountNumber, isAdmin: true });
@@ -137,7 +124,6 @@ app.post('/api/registerAdmin', async (req, res) => {
     }
 });
 
-// Route for user login
 app.post('/api/login', async (req, res) => {
     const { email, password } = req.body;
     try {
@@ -172,7 +158,6 @@ const isAdmin = (req, res, next) => {
 };
 
 
-// Define a route to handle resource creation
 app.post('/api/createResource', async (req, res) => {
     const { title, link, description,topic, youtubeId } = req.body;
     const newResource = new Resource({ title, link, description, topic, youtubeId });
@@ -185,31 +170,28 @@ app.post('/api/createResource', async (req, res) => {
     }
 });
 
-// Define a route to retrieve all resources
 app.get('/api/resourceInfo', async (req, res) => {
     try {
-        const resources = await Resource.find(); // Fetch all resources
-        res.status(200).json(resources); // Send the resources as a JSON response
+        const resources = await Resource.find(); 
+        res.status(200).json(resources); 
     } catch (error) {
         res.status(500).send('Error retrieving resources: ' + error.message);
     }
 });
 
-// Define a route to retrieve a specific resource by ID
 app.get('/api/resourceInfo/:id', async (req, res) => {
     const id = req.params.id;
     try {
-        const resource = await Resource.findById(id); // Fetch the resource by ID
+        const resource = await Resource.findById(id); 
         if (!resource) {
             return res.status(404).send('Resource not found');
         }
-        res.status(200).json(resource); // Send the resource as a JSON response
+        res.status(200).json(resource); 
     } catch (error) {
         res.status(500).send('Error retrieving resource: ' + error.message);
     }
 });
 
-// Update a resource
 app.put('/api/resourceInfo/:id', async (req, res) => {
     const { id } = req.params;
     const { title, link, description, topic ,youtubeId } = req.body;
@@ -218,7 +200,7 @@ app.put('/api/resourceInfo/:id', async (req, res) => {
         const updatedResource = await Resource.findByIdAndUpdate(
             id,
             { title, link, description, topic , youtubeId },
-            { new: true } // Return the updated document
+            { new: true } 
         );
 
         if (!updatedResource) {
@@ -232,7 +214,6 @@ app.put('/api/resourceInfo/:id', async (req, res) => {
     }
 });
 
-// Delete a resource
 app.delete('/api/resourceInfo/:id', async (req, res) => {
     const { id } = req.params;
 
@@ -250,7 +231,6 @@ app.delete('/api/resourceInfo/:id', async (req, res) => {
     }
 });
 
-//Route for creating a new event registration
 app.post('/api/registerEvent', async (req, res) => {
     const {  name, email, eventId } = req.body;
  
@@ -272,9 +252,7 @@ app.post('/api/registerEvent', async (req, res) => {
 });
 
 
-// Events
 
-// Get all events
 app.get('/api/events', async (req, res) => {
   try {
     const events = await Event.find();
@@ -284,7 +262,6 @@ app.get('/api/events', async (req, res) => {
   }
 });
 
-// Get a specific event
 app.get('/api/events/:id', async (req, res) => {
   try {
     const event = await Event.findById(req.params.id);
@@ -295,7 +272,6 @@ app.get('/api/events/:id', async (req, res) => {
   }
 });
 
-// Create an event
 app.post('/api/createEvent', async (req, res) => {
   const { name, description, date, location } = req.body;
   
@@ -316,7 +292,6 @@ app.post('/api/createEvent', async (req, res) => {
   }
 });
 
-// Update an event
 app.put('/api/events/:id', async (req, res) => {
   try {
     const updatedEvent = await Event.findByIdAndUpdate(req.params.id, req.body, { new: true });
@@ -327,7 +302,6 @@ app.put('/api/events/:id', async (req, res) => {
   }
 });
 
-// Delete an event
 app.delete('/api/events/:id', async (req, res) => {
   try {
     const deletedEvent = await Event.findByIdAndDelete(req.params.id);
@@ -349,19 +323,6 @@ module.exports = {
 
 
 
-// Route to generate a temporary email address
-app.get('/generate-temp-email', async (req, res) => {
-    try {
-        const tempMail = new TempMail();
-        const email = await tempMail.getEmail(); // Get a temporary email
-        res.json({ temporaryEmail: email });
-    } catch (error) {
-        console.error('Error generating temporary email:', error);
-        res.status(500).send('Failed to generate temporary email');
-    }
-});
-
-// Route to get a registration by ID
 app.get('/api/regInfo/:eventId', async (req, res) => {
    
     try {
@@ -372,7 +333,6 @@ app.get('/api/regInfo/:eventId', async (req, res) => {
     }
 });
 
-// Change the port if necessary
 const port = process.env.PORT || 5002;
 app.listen(port, () => {
     console.log(`Server running on port ${port}`);

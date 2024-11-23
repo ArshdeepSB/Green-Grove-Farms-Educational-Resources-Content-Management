@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/ercmanagement/static/css/main.78f0bd65.css",
+    "main.js": "/ercmanagement/static/js/main.7edb6963.js",
+    "static/js/453.ee87a7a8.chunk.js": "/ercmanagement/static/js/453.ee87a7a8.chunk.js",
+    "index.html": "/ercmanagement/index.html",
+    "main.78f0bd65.css.map": "/ercmanagement/static/css/main.78f0bd65.css.map",
+    "main.7edb6963.js.map": "/ercmanagement/static/js/main.7edb6963.js.map",
+    "453.ee87a7a8.chunk.js.map": "/ercmanagement/static/js/453.ee87a7a8.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.78f0bd65.css",
+    "static/js/main.7edb6963.js"
+  ]
+}

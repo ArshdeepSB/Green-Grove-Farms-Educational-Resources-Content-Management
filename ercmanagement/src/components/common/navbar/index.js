@@ -19,7 +19,7 @@ const Navbar = ({ isAdmin, onRoleSwitch }) => {
     <header className="header">
     <Link to='/'><a href='/' className="logo">GreenFarms.</a></Link>
         <nav className="navbar">
-            <a href="/">Home</a>
+            <a href="/Green-Grove-Farms-Educational-Resources-Content-Management">Home</a>
             <a href="/ResourcesLibrary">Resource Library</a>
             <a href="/user-events">Events</a>
 

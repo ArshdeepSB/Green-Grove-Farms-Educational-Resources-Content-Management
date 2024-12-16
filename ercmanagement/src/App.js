@@ -38,7 +38,7 @@ function App() {
         
         {/* Routes */}
         <Routes>
-          <Route path="/Green-Grove-Farms-Educational-Resources-Content-Management" element={<Home />} />
+          <Route path="/Green-Grove-Farms-Educational-Resources-Content-Management" element={<HomePage />} />
           <Route path="/ResourcesLibrary" element={<ResourcesLibrary searchTerm={searchTerm} />} />
           <Route path="/events" element={<EventsList />} />
           <Route path="/AdminRes" element={<AdminRes />} />
